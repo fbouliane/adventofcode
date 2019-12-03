@@ -25,27 +25,37 @@ def parse_positions(data):
         yield Position(int(x), int(y), int(vx), int(vy))
 
 
+def move(positions, multiplier=1.0):
+    for pos in positions:
+        pos.x += pos.vx * multiplier
+        pos.y += pos.vy * multiplier
+
+
 def p1(positions):
     seconds = 0
     new_positions = positions
 
+    move(new_positions, 10117)
+    seconds = 10117
+
     while True:
-        graph(new_positions)
+        graph(new_positions, seconds)
 
-        for pos in new_positions:
-            pos.x = pos.x + pos.vx
-            pos.y = pos.y + pos.vy
+        move(new_positions, 1)
         seconds = seconds + 1
+        sleep(5)
 
-        sleep(0.2)
 
-
-def graph(positions):
+def graph(positions, seconds):
     x_points = numpy.asarray([pos.x for pos in positions])
-    y_points = numpy.asarray([pos.y for pos in positions])
+    y_points = numpy.asarray([-pos.y for pos in positions])
 
     pyplot.scatter(x_points, y_points)
-    pyplot.show()
+    pyplot.title(f"{seconds} second")
+    pyplot.savefig('day10.png', dpi=600)
+    # pyplot.show()
+
+
 
 
 print(p1(list(parse_positions(challenge_data(10)))))
