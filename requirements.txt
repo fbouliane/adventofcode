@@ -1,3 +1,5 @@
 advent-of-code-data
 parse
 matplotlib
+dijkstar
+pillow
