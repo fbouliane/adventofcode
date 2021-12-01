@@ -1,31 +1,38 @@
-from utils import challenge_data
-from math import floor
+from utils import challenge_data, bootstrap
+import logging
+
+bootstrap()
+logger = logging.getLogger(__name__)
+
 d1 = challenge_data(1)
 
 
-def fuel(mass):
-    return floor(mass / 3)-2
-
-def part1(inp):
-    return sum([fuel(int(x)) for x in inp])
-
-def rec_fuel(mass):
-    mass_sum = []
-    m_current = mass
-    while True:
-        if fuel(m_current) >= 0:
-            m_current = fuel(m_current)
-            mass_sum.append(m_current)
+def count_increasing(list):
+    increasing = 0
+    old_elem = None
+    for i, elem in enumerate(list):
+        if not old_elem or elem <= old_elem:
+            pass
         else:
-            return sum(mass_sum)
+            increasing +=1
+        old_elem = elem
+    return increasing
 
-def part2(inp):
-    return sum([rec_fuel(int(x)) for x in inp])
+def yield_3(list):
+    for i in range(2, len(list)):
+        yield (list[i-2], list[i-1], list[i])
 
-#modules_mass = d1.split('\n')
-#print(part1(modules_mass))
-if __name__ == "__main__":
-    modules_mass = d1.split('\n')
-    print(part1(modules_mass))
-    print(part2(modules_mass))
+
+def part2(input):
+    sums = [sum(s) for s in yield_3(input)]
+    return count_increasing(sums)
+
+
+if __name__ == '__main__':
+    input = [int(s.strip()) for s in d1.split('\n')]
+    print(count_increasing(input))
+
+    input = [int(s.strip()) for s in d1.split('\n')]
+    print(part2(input))
+
 
